@@ -50,6 +50,7 @@ public class Industria {
             }
             case 2->{
                 //Cadastrar técnico
+                cadastrarTecnico();
             }
             case 3->{
                 //Cadastrar peça
@@ -104,6 +105,34 @@ public class Industria {
     }
 
     public void cadastrarTecnico(){
+                /*
+                Solicitar:
+                ○ Nome do técnico
+                ○ Especialidade
+                3. Validações:
+                ○ Nome obrigatório
+                ○ Evitar duplicidade, validar informações no banco de dados.
+                */
+        String operacao = "Cadastrar técnico";
+        String entidade = "o técnico";
+
+        String nome = uiView.stringInput(operacao,"o nome", entidade);
+        boolean isNullNome = Validacao.verifyNull(nome);
+
+        String especialidade = uiView.stringInput(operacao, "a especialidade", entidade);
+
+        Tecnico tecnico = new Tecnico(nome, especialidade);
+
+        boolean isUniqueNome = tecnicoData.verifyDuplicataByTecnico(tecnico);
+
+        if(isNullNome){
+            uiView.warnEmptyInput("O nome");
+        }
+        else if(!isUniqueNome){
+            uiView.warnNonUnique(" funcionário", "o");
+        }else {
+            tecnicoData.insert(tecnico);
+        }
     }
     public void cadastrarPeca(){
     }
