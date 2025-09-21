@@ -46,6 +46,7 @@ public class Industria {
         switch (mainMenu){
             case 1->{
                 //Cadastrar máquina
+                cadastrarMaquina();
             }
             case 2->{
                 //Cadastrar técnico
@@ -66,7 +67,7 @@ public class Industria {
         }
     }
 
-    public void cadastrarMaquina(){
+    private void cadastrarMaquina(){
         String operacao = "Cadastrar máquina";
         String entidade = "a máquina";
 
@@ -80,12 +81,20 @@ public class Industria {
         String nome = uiView.stringInput(operacao, "o nome", entidade);
         boolean isNullNome = Validacao.verifyNull(nome);
 
+
         String setor = uiView.stringInput(operacao, "o setor", entidade);
         boolean isNullSetor = Validacao.verifyNull(setor);
+
+        Maquina maquinaVerify = new Maquina(nome, setor);
+
+        boolean isUniqueNome = maquinaData.verifyDuplicataBySetor(maquinaVerify);
 
         if(isNullNome || isNullSetor){
             uiView.warnEmptyInput("O nome");
             uiView.warnEmptyInput("O setor");
+        }
+        else if(!isUniqueNome){
+            uiView.warnNonUnique("a máquina", "a");
         }
         else{
             Maquina maquina = new Maquina(nome, setor, StatusMaquina.OPERACIONAL.toString());

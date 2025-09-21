@@ -13,6 +13,7 @@ public class TestConnection {
                 System.out.println("500 - Internal server error");
             }
         } catch (Exception e){
+            System.out.println("Banco de dados não criado!");
             e.printStackTrace();
         }
     }

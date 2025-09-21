@@ -1,6 +1,11 @@
 package br.com.manutencao.view;
 
+import br.com.manutencao.model.Maquina;
 import br.com.manutencao.service.Industria;
+
+import java.sql.Wrapper;
+import java.util.*;
+import java.util.function.Function;
 
 public class Validacao {
     Industria industria;

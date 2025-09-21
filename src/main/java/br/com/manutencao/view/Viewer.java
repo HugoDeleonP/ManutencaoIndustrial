@@ -26,14 +26,14 @@ public class Viewer {
     }
 
     public String stringInput(String operacao, String atributo, String entidade){
-        System.out.printf("%s\n\n", operacao);
-        System.out.printf("Digite %s d%s\n", atributo, entidade);
+        System.out.printf("\n=====================| %s |=====================\n\n", operacao);
+        System.out.printf("Digite %s d%s:\n", atributo, entidade);
         return input.nextLine();
     }
 
     public int intInput(String operacao, String atributo, String entidade){
-        System.out.printf("%s\n\n", operacao);
-        System.out.printf("Digite %s d%s\n", atributo, entidade);
+        System.out.printf("\n%s\n\n", operacao);
+        System.out.printf("Digite %s d%s:\n", atributo, entidade);
         int valor = input.nextInt();
         input.nextLine();
 
@@ -41,7 +41,7 @@ public class Viewer {
     }
 
     public double doubleInput(String operacao, String atributo, String entidade){
-        System.out.printf("%s\n\n", operacao);
+        System.out.printf("\n%s\n\n", operacao);
         System.out.printf("Digite %s d%s\n", atributo, entidade);
         double valor = input.nextDouble();
         input.nextLine();
@@ -50,15 +50,18 @@ public class Viewer {
     }
 
     public void sucessoDao(String entidade, String operacao){
-        System.out.printf("%s %s com sucesso!\n", entidade, operacao);
+        System.out.printf("%s %s com sucesso!\n\n", entidade, operacao);
     }
 
     public void erroDao(String entidade, String operacao){
-        System.out.printf("%s não foi %s, devido a um erro referente ao banco de dados\n", entidade, operacao);
+        System.out.printf("%s não foi %s, devido a um erro referente ao banco de dados\n\n", entidade, operacao);
     }
 
     public void warnEmptyInput(String atributo){
-        System.out.printf("%s é obrigatório\n", atributo);
+        System.out.printf("%s é obrigatório\n\n", atributo);
     }
 
+    public void warnNonUnique(String atributo, String entidade){
+        System.out.printf("Já há um%s cadastrad%s\n\n", atributo, entidade);
+    }
 }

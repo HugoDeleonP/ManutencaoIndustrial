@@ -19,6 +19,11 @@ public class Maquina {
         this.status_maquina = status_maquina;
     }
 
+    public Maquina(String nome, String setor) {
+        this.nome = nome;
+        this.setor = setor;
+    }
+
     public Integer getId() {
         return id;
     }
