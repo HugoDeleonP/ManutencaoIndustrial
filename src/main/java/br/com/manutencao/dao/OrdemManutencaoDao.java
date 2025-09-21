@@ -15,7 +15,7 @@ public class OrdemManutencaoDao {
 
     public void insert(OrdemManutencao ordemManutencao) {
         String sql = """
-                INSERT INTO OrdemManutencao (idMaquina, idTecnico, dataSolicitacao, status_manutencao)
+                INSERT INTO OrdemManutencao (idMaquina, idTecnico, dataSolicitacao, status)
                 VALUES (?, ?, ?, ?);
                 """;
 

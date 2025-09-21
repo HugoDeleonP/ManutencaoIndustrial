@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TecnicoDao {
 
@@ -32,6 +34,33 @@ public class TecnicoDao {
         }catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    public List<Tecnico> select(){
+        String sql = """
+                SELECT id, nome, especialidade
+                FROM Tecnico;
+                """;
+
+        List<Tecnico> tecnicos = new ArrayList<>();
+
+        try(Connection conn = Connect.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String especialidade = rs.getString("especialidade");
+
+                Tecnico tecnico = new Tecnico(id, nome, especialidade);
+                tecnicos.add(tecnico);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return tecnicos;
     }
 
     public boolean verifyDuplicataByTecnico(Tecnico tecnico){

@@ -42,7 +42,7 @@ public class Viewer {
 
     public double doubleInput(String operacao, String atributo, String entidade){
         System.out.printf("\n=====================| %s |=====================\n\n", operacao);
-        System.out.printf("Digite %s d%s\n", atributo, entidade);
+        System.out.printf("Digite %s d%s:\n", atributo, entidade);
         double valor = input.nextDouble();
         input.nextLine();
 
@@ -66,6 +66,10 @@ public class Viewer {
     }
 
     public void warnLessThanZero(String atributo, String atributoComplemento){
-        System.out.printf("%s digitad% é abaixo de zero!", atributo);
+        System.out.printf("%s digitad%s é abaixo de zero!\n\n", atributo, atributoComplemento);
+    }
+
+    public void warnOptionInexistent(String entidade){
+        System.out.printf("O ID digitado d%s não existe.\n\n", entidade);
     }
 }

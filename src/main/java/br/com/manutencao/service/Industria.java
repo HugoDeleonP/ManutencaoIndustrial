@@ -5,9 +5,10 @@ import br.com.manutencao.model.*;
 import br.com.manutencao.view.Validacao;
 import br.com.manutencao.view.Viewer;
 
-import javax.swing.text.View;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Industria {
 
@@ -58,6 +59,7 @@ public class Industria {
             }
             case 4->{
                 //Criar ordem de manutenção
+                cadastrarOrdemManutencao();
             }
             case 5->{
                 //Associar peças à ordem
@@ -105,7 +107,7 @@ public class Industria {
 
     }
 
-    public void cadastrarTecnico(){
+    private void cadastrarTecnico(){
                 /*
                 Solicitar:
                 ○ Nome do técnico
@@ -135,7 +137,7 @@ public class Industria {
             tecnicoData.insert(tecnico);
         }
     }
-    public void cadastrarPeca(){
+    private void cadastrarPeca(){
         /*
         Validações:
         ○ Nome obrigatório
@@ -170,10 +172,97 @@ public class Industria {
             pecaData.insert(peca);
         }
     }
-    public void cadastrarOrdemManutencao(){
+    private void cadastrarOrdemManutencao(){
+
+        /*
+            Selecionar máquina:
+            ○ Listar máquinas somente com status: “OPERACIONAL”
+            ○ Usuário escolhe
+            ○ Validar escolha, se é uma das opções disponíveis.
+            3. Selecionar técnico:
+            ○ Listar todos os técnicos
+            ○ Usuário escolhe
+            ○ Validar escolha, se é uma das opções disponíveis.
+
+            4. Data de solicitação = data atual
+            5. Status inicial = PENDENTE
+            6. Inserção no banco:
+            ○ Inserir informações obtidas na sua respectiva tabela.
+            7. Atualizar status da máquina para EM_MANUTENCAO
+        */
+        String operacao = "Cadastrar ordem de manutenção";
+
+        maquinas = listaMaquina_Pendente();
+        Integer maquina_id = uiView.intInput(operacao,"o ID", "a máquina desejada");
+        Maquina maquina = buscaMaquina(maquina_id);
+        if(maquina == null){
+            uiView.warnOptionInexistent("a máquina");
+            return;
+        }
+
+        tecnicos = listaTecnico();
+        Integer tecnico_id = uiView.intInput(operacao, "o ID","o técnico desejado");
+        Tecnico tecnico = buscaTecnico(tecnico_id);
+        if(tecnico == null){
+            uiView.warnOptionInexistent("o técnico");
+            return;
+        }
+
+        LocalDate data = LocalDate.now();
+        String status = StatusManutencao.PENDENTE.toString();
+        
+        OrdemManutencao manutencao = new OrdemManutencao(maquina, tecnico, data, status);
+
+
+        manutencaoData.insert(manutencao);
+        maquinaData.updateStatus(maquina);
+
     }
-    public void associaPeca_ordem(){
+
+    private List<Maquina> listaMaquina_Pendente(){
+        maquinas = maquinaData.select_statusPendente();
+
+        for(Maquina maquina: maquinas){
+            System.out.println(maquina);
+        }
+
+        return maquinas;
     }
-    public void executaManutencao(){
+
+    private Maquina buscaMaquina(Integer id){
+        maquinas = maquinaData.select();
+        for(Maquina maquina: maquinas){
+            if(Objects.equals(maquina.getId(), id)){
+                return maquina;
+            }
+        }
+
+        return null;
+    }
+
+    private List<Tecnico> listaTecnico(){
+        tecnicos = tecnicoData.select();
+
+        for(Tecnico tecnico: tecnicos){
+            System.out.println(tecnico);
+        }
+
+        return tecnicos;
+    }
+
+    private Tecnico buscaTecnico(Integer id){
+        tecnicos = tecnicoData.select();
+        for(Tecnico tecnico: tecnicos){
+            if(Objects.equals(tecnico.getId(), id)){
+                return tecnico;
+            }
+        }
+
+        return null;
+    }
+
+    private void associaPeca_ordem(){
+    }
+    private void executaManutencao(){
     }
 }

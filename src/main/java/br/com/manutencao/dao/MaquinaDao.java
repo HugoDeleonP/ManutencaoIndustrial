@@ -39,7 +39,7 @@ public class MaquinaDao {
 
     public List<Maquina> select(){
         String sql = """
-                SELECT id, nome, setor, status_maquina
+                SELECT id, nome, setor, status
                 FROM Maquina;
                 """;
 
@@ -54,9 +54,41 @@ public class MaquinaDao {
                 Integer id = rs.getInt("id");
                 String nome = rs.getString("nome");
                 String setor = rs.getString("setor");
-                String status_maquina = rs.getString("status_maquina");
+                String status = rs.getString("status");
 
-                Maquina maquina = new Maquina(id, nome, setor, status_maquina);
+                Maquina maquina = new Maquina(id, nome, setor, status);
+                maquinas.add(maquina);
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return maquinas;
+    }
+
+
+    public List<Maquina> select_statusPendente(){
+        String sql = """
+                SELECT id, nome, setor, status
+                FROM Maquina
+                where status = "OPERACIONAL";
+                """;
+
+        List<Maquina> maquinas = new ArrayList<>();
+
+        try(Connection conn = Connect.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                Integer id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String setor = rs.getString("setor");
+                String status = rs.getString("status");
+
+                Maquina maquina = new Maquina(id, nome, setor, status);
                 maquinas.add(maquina);
             }
 
@@ -92,6 +124,23 @@ public class MaquinaDao {
         }
 
         return false;
+    }
+
+    public void updateStatus(Maquina maquina){
+        String sql = """
+                UPDATE Maquina SET status = "EM_MANUTENCAO"
+                WHERE id = ?;
+                """;
+
+        try(Connection conn = Connect.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, maquina.getId());
+            stmt.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }
