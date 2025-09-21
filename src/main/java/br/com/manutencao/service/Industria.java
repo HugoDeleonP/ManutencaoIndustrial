@@ -262,6 +262,24 @@ public class Industria {
     }
 
     private void associaPeca_ordem(){
+        /*
+        2. Selecionar ordem:
+            ○ Listar todas as ordens com status: “PENDENTE”
+            ○ Usuário escolhe
+            ○ Valida se é uma opção válida.
+
+        3. Para cada peça:
+            ○ Listar peças e seus respectivos saldos
+            ○ Selecionar peça do estoque
+            ○ Validar se é uma opção válida
+            ○ Informar quantidade necessária
+            ○ Validar quantidade ≥ 0
+        4. Inserir na tabela “OrdemPeca” as informações obtidas
+        5. Permitir adicionar várias peças, faça uma validação após inserir solicitando se o usuário
+        deseja adicionar mais uma peça a ordem.
+         */
+
+
     }
     private void executaManutencao(){
     }

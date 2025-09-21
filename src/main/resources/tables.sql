@@ -1,5 +1,7 @@
 use manutencao_industrial;
 
+describe Maquina;
+
 -- Tabela de Máquinas
 CREATE TABLE Maquina (
 id INT PRIMARY KEY AUTO_INCREMENT,
@@ -50,3 +52,41 @@ FOREIGN KEY (idPeca) REFERENCES Peca(id)
 
 SELECT * FROM Maquina;
 select * from Tecnico;
+SELECT * FROM Peca;
+
+                SELECT id, nome, setor, status
+                FROM Maquina
+                where status = "OPERACIONAL";
+
+                                SELECT id, nome, especialidade
+                FROM Tecnico;
+
+select * from OrdemManutencao;
+delete from OrdemManutencao
+where id = 1;
+
+describe OrdemManutencao;
+
+-- ○ Listar todas as ordens com status: “PENDENTE”
+
+select OrdemManutencao.id as manutencao_id,
+idMaquina as maquina_id,
+Maquina.nome as maquina_nome,
+idTecnico as tecnico_id,
+Tecnico.nome as tecnico_nome,
+dataSolicitacao,
+OrdemManutencao.status
+from OrdemManutencao
+LEFT JOIN Maquina ON OrdemManutencao.idMaquina = Maquina.id
+LEFT JOIN Tecnico ON OrdemManutencao.idTecnico = Tecnico.id
+WHERE status = "PENDENTE";
+
+select OrdemManutencao.id as manutencao_id,
+Maquina.nome as maquina_nome,
+Tecnico.nome as tecnico_nome,
+dataSolicitacao,
+OrdemManutencao.status
+from OrdemManutencao
+LEFT JOIN Maquina ON OrdemManutencao.idMaquina = Maquina.id
+LEFT JOIN Tecnico ON OrdemManutencao.idTecnico = Tecnico.id
+WHERE status = "PENDENTE";
