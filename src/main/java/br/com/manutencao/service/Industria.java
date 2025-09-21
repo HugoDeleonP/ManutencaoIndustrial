@@ -54,6 +54,7 @@ public class Industria {
             }
             case 3->{
                 //Cadastrar peça
+                cadastrarPeca();
             }
             case 4->{
                 //Criar ordem de manutenção
@@ -135,6 +136,39 @@ public class Industria {
         }
     }
     public void cadastrarPeca(){
+        /*
+        Validações:
+        ○ Nome obrigatório
+        ○ Estoque ≥ 0
+        ○ Evitar duplicidade, validar se a peça já existe no banco de dados
+        */
+        String operacao = "Cadastrar peça";
+        String entidade = "a peça";
+
+        String nome = uiView.stringInput(operacao,"o nome", entidade);
+        boolean isNullNome = Validacao.verifyNull(nome);
+
+        double estoque = uiView.intInput(operacao, "a quantidade de estoque", entidade);
+        boolean isGreaterThanZero = Validacao.verifyNullDouble(estoque);
+
+        boolean isUnique = pecaData.verifyUniqueByNome(nome);
+
+        Peca peca = new Peca(nome, estoque);
+
+        if(isNullNome){
+            uiView.warnEmptyInput("O nome");
+        }
+        else if(!isGreaterThanZero){
+            uiView.warnLessThanZero("O estoque", "o");
+        }
+
+        //analisar a validade da leitura de um double e int
+        else if(!isUnique){
+            uiView.warnNonUnique("a peça", "a");
+        }
+        else{
+            pecaData.insert(peca);
+        }
     }
     public void cadastrarOrdemManutencao(){
     }

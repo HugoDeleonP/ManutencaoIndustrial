@@ -27,6 +27,7 @@ public class OrdemManutencaoDao {
             stmt.setObject(3, ordemManutencao.getDataSolicitacao());
             stmt.setString(4, ordemManutencao.getStatus_manutencao());
 
+            stmt.executeUpdate();
             uiView.sucessoDao("Ordem de manutenção", "cadastrada");
 
         } catch (SQLException e) {

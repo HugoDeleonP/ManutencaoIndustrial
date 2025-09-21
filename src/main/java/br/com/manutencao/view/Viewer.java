@@ -32,7 +32,7 @@ public class Viewer {
     }
 
     public int intInput(String operacao, String atributo, String entidade){
-        System.out.printf("\n%s\n\n", operacao);
+        System.out.printf("\n=====================| %s |=====================\n\n", operacao);
         System.out.printf("Digite %s d%s:\n", atributo, entidade);
         int valor = input.nextInt();
         input.nextLine();
@@ -41,7 +41,7 @@ public class Viewer {
     }
 
     public double doubleInput(String operacao, String atributo, String entidade){
-        System.out.printf("\n%s\n\n", operacao);
+        System.out.printf("\n=====================| %s |=====================\n\n", operacao);
         System.out.printf("Digite %s d%s\n", atributo, entidade);
         double valor = input.nextDouble();
         input.nextLine();
@@ -61,7 +61,11 @@ public class Viewer {
         System.out.printf("%s é obrigatório\n\n", atributo);
     }
 
-    public void warnNonUnique(String atributo, String entidade){
-        System.out.printf("Já há um%s cadastrad%s\n\n", atributo, entidade);
+    public void warnNonUnique(String entidade, String atributo){
+        System.out.printf("Já há um%s cadastrad%s\n\n", entidade, atributo);
+    }
+
+    public void warnLessThanZero(String atributo, String atributoComplemento){
+        System.out.printf("%s digitad% é abaixo de zero!", atributo);
     }
 }

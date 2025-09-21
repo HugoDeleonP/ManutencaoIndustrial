@@ -21,4 +21,12 @@ public class Validacao {
     public static boolean verifyNull(String variavel){
         return variavel.trim().isEmpty();
     }
+
+    public static boolean verifyNullDouble(Double numero){
+        return numero >= 0;
+    }
+
+    public static boolean verifyNullInt(int numero){
+        return numero >= 0;
+    }
 }

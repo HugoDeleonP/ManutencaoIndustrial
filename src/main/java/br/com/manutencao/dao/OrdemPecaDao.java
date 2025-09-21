@@ -26,6 +26,7 @@ public class OrdemPecaDao {
             stmt.setInt(2, ordemPeca.getPeca().getId());
             stmt.setDouble(3, ordemPeca.getQuantidade());
 
+            stmt.executeUpdate();
             uiView.sucessoDao("Ordem de peça", "cadastrada");
 
         } catch (SQLException e) {
