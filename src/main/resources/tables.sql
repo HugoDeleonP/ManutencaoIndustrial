@@ -1,9 +1,11 @@
+use manutencao_industrial;
+
 -- Tabela de Máquinas
 CREATE TABLE Maquina (
 id INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(100) NOT NULL,
 setor VARCHAR(50) NOT NULL,
-status VARCHAR(20) NOT NULL -- OPERACIONAL / EM_MANUTENCAO
+status ENUM("EM_MANUTENCAO", "OPERACIONAL") NOT NULL -- OPERACIONAL / EM_MANUTENCAO
 );
 -- Tabela de Técnicos
 CREATE TABLE Tecnico (
@@ -11,20 +13,28 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(100) NOT NULL,
 especialidade VARCHAR(50)
 );
+
+select count(nome) from Tecnico
+where especialidade = 'ti'
+and nome = 'hugo';
+
 -- Tabela de Peças
 CREATE TABLE Peca (
 id INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(100) NOT NULL,
-
 estoque DOUBLE NOT NULL
 );
+
+select count(nome) from Peca
+where nome = 'motor';
+
 -- Tabela de Ordens de Manutenção
 CREATE TABLE OrdemManutencao (
 id INT PRIMARY KEY AUTO_INCREMENT,
 idMaquina INT NOT NULL,
 idTecnico INT NOT NULL,
 dataSolicitacao DATE NOT NULL,
-status VARCHAR(20) NOT NULL, -- PENDENTE / EXECUTADA / CANCELADA
+status ENUM("PENDENTE", "EXECUTADA", "CANCELADA") NOT NULL, -- PENDENTE / EXECUTADA / CANCELADA
 FOREIGN KEY (idMaquina) REFERENCES Maquina(id),
 FOREIGN KEY (idTecnico) REFERENCES Tecnico(id)
 );
@@ -37,3 +47,6 @@ PRIMARY KEY (idOrdem, idPeca),
 FOREIGN KEY (idOrdem) REFERENCES OrdemManutencao(id),
 FOREIGN KEY (idPeca) REFERENCES Peca(id)
 );
+
+SELECT * FROM Maquina;
+select * from Tecnico;
