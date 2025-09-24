@@ -14,9 +14,7 @@ import java.util.List;
 
 public class TecnicoDao {
 
-    Viewer uiView = new Viewer();
-
-    public void insert(Tecnico tecnico){
+    public void insert(Tecnico tecnico) throws SQLException{
         String sql = """
                 INSERT INTO Tecnico (nome, especialidade)
                 VALUES (?, ?);
@@ -29,14 +27,11 @@ public class TecnicoDao {
             stmt.setString(2, tecnico.getEspecialidade());
 
             stmt.executeUpdate();
-            uiView.sucessoDao("Técnico", "cadastrado");
 
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
-    public List<Tecnico> select(){
+    public List<Tecnico> select() throws SQLException{
         String sql = """
                 SELECT id, nome, especialidade
                 FROM Tecnico;
@@ -57,13 +52,11 @@ public class TecnicoDao {
                 tecnicos.add(tecnico);
             }
 
-        }catch (SQLException e){
-            e.printStackTrace();
         }
         return tecnicos;
     }
 
-    public boolean verifyDuplicataByTecnico(Tecnico tecnico){
+    public boolean verifyDuplicataByTecnico(Tecnico tecnico) throws SQLException{
         String sql = """
                 select count(nome) as quantidade_nome from Tecnico
                 where especialidade = ?
@@ -83,10 +76,7 @@ public class TecnicoDao {
                 return quantidade_nome == 0;
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
         return false;
     }
 }

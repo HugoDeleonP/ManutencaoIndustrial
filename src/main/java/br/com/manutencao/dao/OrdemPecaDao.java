@@ -7,13 +7,13 @@ import br.com.manutencao.view.Viewer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class OrdemPecaDao {
 
-    Viewer uiView = new Viewer();
 
-    public void insert(OrdemPeca ordemPeca) {
+    public void insert(OrdemPeca ordemPeca) throws SQLException{
         String sql = """
                 INSERT INTO OrdemPeca (idOrdem, idPeca, quantidade)
                 VALUES (?, ?, ?);
@@ -27,10 +27,28 @@ public class OrdemPecaDao {
             stmt.setDouble(3, ordemPeca.getQuantidade());
 
             stmt.executeUpdate();
-            uiView.sucessoDao("Ordem de peça", "cadastrada");
 
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+    }
+    public boolean verifyEstoque_quantidade() throws SQLException{
+        String sql = """
+                select Peca.estoque as peca_estoque, OrdemPeca.quantidade as ordemPeca_quantidade
+                FROM OrdemPeca
+                LEFT JOIN Peca ON OrdemPeca.idPeca = Peca.id
+                WHERE ;
+                """;
+
+        try(Connection conn = Connect.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                double peca_estoque = rs.getDouble("peca_estoque");
+                double ordemPeca_quantidade = rs.getDouble("ordemPeca_quantidade");
+
+                return peca_estoque >= ordemPeca_quantidade;
+            }
+        }
+        return false;
     }
 }

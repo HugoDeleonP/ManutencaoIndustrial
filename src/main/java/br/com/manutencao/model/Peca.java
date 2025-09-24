@@ -45,6 +45,6 @@ public class Peca {
         return "=========================| Peça |=========================\n" +
                 "ID: " + this.id +
                 "\nNome: " + this.nome +
-                "\nSetor: " + this.estoque + "\n";
+                "\nEstoque: " + this.estoque + "\n";
     }
 }

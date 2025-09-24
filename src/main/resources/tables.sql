@@ -1,6 +1,6 @@
-use manutencao_industrial;
+create DATABASE manutencao_industrial;
 
-describe Maquina;
+use manutencao_industrial;
 
 -- Tabela de Máquinas
 CREATE TABLE Maquina (
@@ -79,7 +79,7 @@ OrdemManutencao.status
 from OrdemManutencao
 LEFT JOIN Maquina ON OrdemManutencao.idMaquina = Maquina.id
 LEFT JOIN Tecnico ON OrdemManutencao.idTecnico = Tecnico.id
-WHERE status = "PENDENTE";
+WHERE OrdemManutencao.status = "PENDENTE";
 
 select OrdemManutencao.id as manutencao_id,
 Maquina.nome as maquina_nome,
@@ -89,4 +89,4 @@ OrdemManutencao.status
 from OrdemManutencao
 LEFT JOIN Maquina ON OrdemManutencao.idMaquina = Maquina.id
 LEFT JOIN Tecnico ON OrdemManutencao.idTecnico = Tecnico.id
-WHERE status = "PENDENTE";
+WHERE OrdemManutencao.status = "PENDENTE";

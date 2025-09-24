@@ -72,4 +72,13 @@ public class Viewer {
     public void warnOptionInexistent(String entidade){
         System.out.printf("O ID digitado d%s não existe.\n\n", entidade);
     }
+
+    public int adicionarMaisPeca(){
+        System.out.println("Deseja adicionar mais peça?");
+        System.out.println("1- Sim\n2- Não");
+        int escolha = input.nextInt();
+        input.nextLine();
+
+        return escolha;
+    }
 }

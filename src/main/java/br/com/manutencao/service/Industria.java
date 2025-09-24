@@ -5,6 +5,7 @@ import br.com.manutencao.model.*;
 import br.com.manutencao.view.Validacao;
 import br.com.manutencao.view.Viewer;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ public class Industria {
             }
             case 5->{
                 //Associar peças à ordem
+                associaPeca_ordem();
             }
             case 6->{
                 //Executar manutenção
@@ -74,6 +76,7 @@ public class Industria {
     private void cadastrarMaquina(){
         String operacao = "Cadastrar máquina";
         String entidade = "a máquina";
+        boolean isUniqueNome = false;
 
         /*
         Nome e setor obrigatórios
@@ -85,13 +88,16 @@ public class Industria {
         String nome = uiView.stringInput(operacao, "o nome", entidade);
         boolean isNullNome = Validacao.verifyNull(nome);
 
-
         String setor = uiView.stringInput(operacao, "o setor", entidade);
         boolean isNullSetor = Validacao.verifyNull(setor);
 
         Maquina maquinaVerify = new Maquina(nome, setor);
+        try{
+             isUniqueNome = maquinaData.verifyDuplicataBySetor(maquinaVerify);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
-        boolean isUniqueNome = maquinaData.verifyDuplicataBySetor(maquinaVerify);
 
         if(isNullNome || isNullSetor){
             uiView.warnEmptyInput("O nome");
@@ -102,7 +108,14 @@ public class Industria {
         }
         else{
             Maquina maquina = new Maquina(nome, setor, StatusMaquina.OPERACIONAL.toString());
-            maquinaData.insert(maquina);
+
+            try{
+                maquinaData.insert(maquina);
+                uiView.sucessoDao("Máquina", "cadastrada");
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+
         }
 
     }
@@ -118,6 +131,7 @@ public class Industria {
                 */
         String operacao = "Cadastrar técnico";
         String entidade = "o técnico";
+        boolean isUniqueNome = false;
 
         String nome = uiView.stringInput(operacao,"o nome", entidade);
         boolean isNullNome = Validacao.verifyNull(nome);
@@ -126,7 +140,11 @@ public class Industria {
 
         Tecnico tecnico = new Tecnico(nome, especialidade);
 
-        boolean isUniqueNome = tecnicoData.verifyDuplicataByTecnico(tecnico);
+        try{
+            isUniqueNome = tecnicoData.verifyDuplicataByTecnico(tecnico);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
         if(isNullNome){
             uiView.warnEmptyInput("O nome");
@@ -134,7 +152,12 @@ public class Industria {
         else if(!isUniqueNome){
             uiView.warnNonUnique(" funcionário", "o");
         }else {
-            tecnicoData.insert(tecnico);
+            try{
+                tecnicoData.insert(tecnico);
+                uiView.sucessoDao("Técnico", "cadastrado");
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
         }
     }
     private void cadastrarPeca(){
@@ -146,6 +169,7 @@ public class Industria {
         */
         String operacao = "Cadastrar peça";
         String entidade = "a peça";
+        boolean isUnique = false;
 
         String nome = uiView.stringInput(operacao,"o nome", entidade);
         boolean isNullNome = Validacao.verifyNull(nome);
@@ -153,7 +177,11 @@ public class Industria {
         double estoque = uiView.intInput(operacao, "a quantidade de estoque", entidade);
         boolean isGreaterThanZero = Validacao.verifyNullDouble(estoque);
 
-        boolean isUnique = pecaData.verifyUniqueByNome(nome);
+        try {
+            pecaData.verifyUniqueByNome(nome);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
 
         Peca peca = new Peca(nome, estoque);
 
@@ -169,7 +197,13 @@ public class Industria {
             uiView.warnNonUnique("a peça", "a");
         }
         else{
-            pecaData.insert(peca);
+            try{
+                pecaData.insert(peca);
+                uiView.sucessoDao("Peça", "cadastrada");
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+
         }
     }
     private void cadastrarOrdemManutencao(){
@@ -213,14 +247,22 @@ public class Industria {
         
         OrdemManutencao manutencao = new OrdemManutencao(maquina, tecnico, data, status);
 
-
-        manutencaoData.insert(manutencao);
-        maquinaData.updateStatus(maquina);
+        try{
+            manutencaoData.insert(manutencao);
+            uiView.sucessoDao("Ordem de manutenção", "cadastrada");
+            maquinaData.updateStatus(maquina);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
     }
 
     private List<Maquina> listaMaquina_Pendente(){
-        maquinas = maquinaData.select_statusPendente();
+        try{
+            maquinas = maquinaData.select_statusPendente();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
         for(Maquina maquina: maquinas){
             System.out.println(maquina);
@@ -230,7 +272,12 @@ public class Industria {
     }
 
     private Maquina buscaMaquina(Integer id){
-        maquinas = maquinaData.select();
+        try{
+            maquinas = maquinaData.select();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
         for(Maquina maquina: maquinas){
             if(Objects.equals(maquina.getId(), id)){
                 return maquina;
@@ -241,7 +288,12 @@ public class Industria {
     }
 
     private List<Tecnico> listaTecnico(){
-        tecnicos = tecnicoData.select();
+        try{
+            tecnicos = tecnicoData.select();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
 
         for(Tecnico tecnico: tecnicos){
             System.out.println(tecnico);
@@ -251,7 +303,11 @@ public class Industria {
     }
 
     private Tecnico buscaTecnico(Integer id){
-        tecnicos = tecnicoData.select();
+        try{
+            tecnicos = tecnicoData.select();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
         for(Tecnico tecnico: tecnicos){
             if(Objects.equals(tecnico.getId(), id)){
                 return tecnico;
@@ -278,9 +334,155 @@ public class Industria {
         5. Permitir adicionar várias peças, faça uma validação após inserir solicitando se o usuário
         deseja adicionar mais uma peça a ordem.
          */
+        String operacao = "Cadastrar ordem de peça";
+
+        boolean continuar = false;
+
+        do{
+            manutencoes = listaManutencao();
+            Integer manutencao_id = uiView.intInput(operacao, "o ID", "a ordem de manutenção");
+            OrdemManutencao manutencao = buscaManutencao(manutencao_id);
+            if(manutencao == null){
+                uiView.warnOptionInexistent("a manutenção");
+                return;
+            }
+
+            pecas = listaPeca();
+            Integer id = uiView.intInput(operacao, "o ID", "a peça");
+            Peca peca = buscaPeca(id);
+            if(peca == null){
+                uiView.warnOptionInexistent("a peça");
+                return;
+            }
+            double quantidade_estoque = uiView.doubleInput(operacao, "a quantidade", "a peça");
+
+            if(quantidade_estoque < 0){
+                uiView.warnLessThanZero("A quantidade", "a");
+                return;
+            }
+            OrdemPeca ordemPeca = new OrdemPeca(manutencao, peca, quantidade_estoque);
+
+            try{
+                ordemPecaData.insert(ordemPeca);
+                uiView.sucessoDao("Ordem de peça", "cadastrada");
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            int escolha = uiView.adicionarMaisPeca();
+
+            switch (escolha){
+                case 1 -> {
+                    continuar = true;
+                }
+                case 2 ->{
+                    return;
+                }
+                default -> {
+                    uiView.warnOptionInexistent("a opção");
+                }
+            }
+        }while(continuar);
 
 
     }
+
+    private List<OrdemManutencao> listaManutencao(){
+        try{
+            manutencoes = manutencaoData.select_statusPendente();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+        for(OrdemManutencao manutencao: manutencoes){
+            System.out.println(manutencao);
+        }
+
+        return manutencoes;
+    }
+
+    private OrdemManutencao buscaManutencao(Integer id){
+        for(OrdemManutencao manutencao: manutencoes){
+            if(Objects.equals(manutencao.getId(), id)){
+                return manutencao;
+            }
+        }
+
+        return null;
+    }
+
+    private List<Peca> listaPeca(){
+        try{
+            pecas = pecaData.select_saldo();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+        for(Peca peca: pecas){
+            System.out.println(peca);
+        }
+
+        return pecas;
+    }
+
+    private Peca buscaPeca(Integer id){
+        for(Peca peca: pecas){
+            if(Objects.equals(peca.getId(), id)){
+                return peca;
+            }
+        }
+
+        return null;
+    }
+
     private void executaManutencao(){
+
+        /*
+
+        2. Selecionar ordem somente com status: “PENDENTE”.
+        3. Verificar estoque de peças:
+            ○ Para cada peça da ordem:
+                ■ Verificar o estoque atual da peça no banco de dados.
+                ■ Comparar com quantidade necessária
+
+        4. Se estoque insuficiente:
+            ○ Mensagem de erro e abortar execução
+
+        5. Se estoque suficiente:
+            ○ Para cada peça:
+                ■ Atualize o estoque diminuindo a quantidade que foi
+                utilizada na ordem.
+            ○ Atualizar ordem:
+                ■ Atualize o status da ordem para “Executada”
+            ○ Atualizar máquina:
+                ■ Atualize o status da maquina para “OPERACIONAL”.
+        */
+        String operacao = "Executar manutenção";
+        boolean comparaEstoque_quantidade = false;
+
+        manutencoes = listaManutencao();
+        Integer manutencao_id = uiView.intInput(operacao, "o ID", "a ordem de manutenção");
+        OrdemManutencao manutencao = buscaManutencao(manutencao_id);
+        try{
+            comparaEstoque_quantidade = ordemPecaData.verifyEstoque_quantidade();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        if(manutencao == null){
+            uiView.warnOptionInexistent("a manutenção");
+            return;
+        }
+        else if(comparaEstoque_quantidade == false){
+            System.out.println("A quantidade de estoque é menor que a quantidade necessária");
+            return;
+        }
+        else{
+
+        }
+
+
     }
 }

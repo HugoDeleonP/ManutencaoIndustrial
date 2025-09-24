@@ -1,6 +1,7 @@
 package br.com.manutencao.dao;
 
 import br.com.manutencao.model.Maquina;
+import br.com.manutencao.model.OrdemManutencao;
 import br.com.manutencao.utils.Connect;
 import br.com.manutencao.view.Viewer;
 
@@ -13,9 +14,8 @@ import java.util.List;
 
 public class MaquinaDao {
 
-    Viewer uiView = new Viewer();
 
-    public void insert(Maquina maquina){
+    public void insert(Maquina maquina) throws SQLException{
         String sql = """
                 INSERT INTO Maquina (nome, setor, status)
                 VALUES (?, ?, ?);
@@ -30,14 +30,11 @@ public class MaquinaDao {
 
             stmt.executeUpdate();
 
-            uiView.sucessoDao("Máquina", "cadastrada");
 
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
-    public List<Maquina> select(){
+    public List<Maquina> select() throws SQLException{
         String sql = """
                 SELECT id, nome, setor, status
                 FROM Maquina;
@@ -60,15 +57,13 @@ public class MaquinaDao {
                 maquinas.add(maquina);
             }
 
-        } catch (SQLException e){
-            e.printStackTrace();
         }
 
         return maquinas;
     }
 
 
-    public List<Maquina> select_statusPendente(){
+    public List<Maquina> select_statusPendente() throws SQLException{
         String sql = """
                 SELECT id, nome, setor, status
                 FROM Maquina
@@ -92,14 +87,12 @@ public class MaquinaDao {
                 maquinas.add(maquina);
             }
 
-        } catch (SQLException e){
-            e.printStackTrace();
         }
 
         return maquinas;
     }
 
-    public boolean verifyDuplicataBySetor(Maquina maquina){
+    public boolean verifyDuplicataBySetor(Maquina maquina) throws SQLException{
         String sql = """
                 select count(nome) as quantidade_nome from Maquina
                 where setor = ?
@@ -119,16 +112,14 @@ public class MaquinaDao {
                 return quantidade == 0;
             }
 
-        }catch (SQLException e){
-            e.printStackTrace();
         }
 
         return false;
     }
 
-    public void updateStatus(Maquina maquina){
+    public void updateStatus(Maquina maquina) throws SQLException{
         String sql = """
-                UPDATE Maquina SET status = "EM_MANUTENCAO"
+                UPDATE Maquina SET status = ?
                 WHERE id = ?;
                 """;
 
@@ -138,8 +129,21 @@ public class MaquinaDao {
             stmt.setInt(1, maquina.getId());
             stmt.executeUpdate();
 
-        }catch (SQLException e){
-            e.printStackTrace();
+        }
+    }
+
+    public void updateExecutada(Integer id) throws SQLException{
+        String sql = """
+                UPDATE OrdemManutencao SET status = "OPERACIONAL"
+                WHERE id = ?;
+                """;
+
+        try(Connection conn = Connect.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
         }
     }
 

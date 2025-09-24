@@ -16,6 +16,11 @@ public class Tecnico {
         this.especialidade = especialidade;
     }
 
+    public Tecnico(Integer id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     public Integer getId() {
         return id;
     }

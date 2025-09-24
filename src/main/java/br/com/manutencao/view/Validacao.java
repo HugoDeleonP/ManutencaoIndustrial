@@ -16,8 +16,6 @@ public class Validacao {
         uiView = new Viewer();
     }
 
-
-
     public static boolean verifyNull(String variavel){
         return variavel.trim().isEmpty();
     }

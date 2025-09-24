@@ -83,7 +83,7 @@ public class OrdemManutencao {
         return "=========================| Ordem de manutenção |=========================\n" +
                 "ID: " + this.id +
                 "\nMáquina: " + this.maquina.getId() +
-                "\nTécnico: " + this.tecnico.getId() +
+                "\nTécnico: " + this.tecnico.getNome() +
                 "\nData de solicitação: " + this.dataSolicitacao +
                 "\nStatus: " + this.status_manutencao + "\n";
     }
