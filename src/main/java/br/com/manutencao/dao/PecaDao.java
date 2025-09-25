@@ -35,7 +35,7 @@ public class PecaDao {
     public List<Peca> select_saldo() throws SQLException{
         String sql = """
                 SELECT id, nome, estoque
-                FROM Peca;
+                FROM Peca
                 """;
         List<Peca> pecas = new ArrayList<>();
 

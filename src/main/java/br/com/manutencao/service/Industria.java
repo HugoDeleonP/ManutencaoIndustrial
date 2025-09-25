@@ -68,6 +68,7 @@ public class Industria {
             }
             case 6->{
                 //Executar manutenção
+                executaManutencao();
             }
 
         }
@@ -359,6 +360,9 @@ public class Industria {
             if(quantidade_estoque < 0){
                 uiView.warnLessThanZero("A quantidade", "a");
                 return;
+            }else if(peca.getEstoque() < quantidade_estoque){
+                System.out.println("A quantidade de estoque é menor que a quantidade necessária");
+                return;
             }
             OrdemPeca ordemPeca = new OrdemPeca(manutencao, peca, quantidade_estoque);
 
@@ -460,6 +464,9 @@ public class Industria {
             ○ Atualizar máquina:
                 ■ Atualize o status da maquina para “OPERACIONAL”.
         */
+
+
+        /*
         String operacao = "Executar manutenção";
         boolean comparaEstoque_quantidade = false;
 
@@ -467,21 +474,21 @@ public class Industria {
         Integer manutencao_id = uiView.intInput(operacao, "o ID", "a ordem de manutenção");
         OrdemManutencao manutencao = buscaManutencao(manutencao_id);
         try{
-            comparaEstoque_quantidade = ordemPecaData.verifyEstoque_quantidade();
+            comparaEstoque_quantidade = ordemPecaData.verifyEstoque_quantidade(manutencao);
         }catch (SQLException e){
             e.printStackTrace();
         }
-        if(manutencao == null){
-            uiView.warnOptionInexistent("a manutenção");
-            return;
-        }
-        else if(comparaEstoque_quantidade == false){
+        if(!comparaEstoque_quantidade){
             System.out.println("A quantidade de estoque é menor que a quantidade necessária");
             return;
         }
         else{
+            try{
+                pecaData.updateEstoque();
+            }catch (SQLException e){
 
-        }
+            }
+        }*/
 
 
     }

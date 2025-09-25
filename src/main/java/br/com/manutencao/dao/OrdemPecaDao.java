@@ -2,6 +2,7 @@ package br.com.manutencao.dao;
 
 import br.com.manutencao.model.OrdemManutencao;
 import br.com.manutencao.model.OrdemPeca;
+import br.com.manutencao.model.Peca;
 import br.com.manutencao.utils.Connect;
 import br.com.manutencao.view.Viewer;
 
@@ -30,16 +31,18 @@ public class OrdemPecaDao {
 
         }
     }
-    public boolean verifyEstoque_quantidade() throws SQLException{
+    public boolean verifyEstoque_quantidade(OrdemManutencao manutencao) throws SQLException{
         String sql = """
                 select Peca.estoque as peca_estoque, OrdemPeca.quantidade as ordemPeca_quantidade
                 FROM OrdemPeca
                 LEFT JOIN Peca ON OrdemPeca.idPeca = Peca.id
-                WHERE ;
+                WHERE OrdemPeca.idOrdem = ?;
                 """;
 
         try(Connection conn = Connect.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, manutencao.getId());
+
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()){
